@@ -28,6 +28,7 @@ def create_app(test_config=None):
     @app.route('/hello')
     def hello():
         return 'Hello, World!'
+
     from . import db
     db.init_app(app)  # Up to here was initialization. The following is initialisation of blueprints
     from . import auth
@@ -35,6 +36,9 @@ def create_app(test_config=None):
     from . import blog
     app.register_blueprint(blog.bp)
     app.add_url_rule('/', endpoint='index') # Registering blueprints
+    #app.add_url_rule('/update', endpoint='update')
+    #app.add_url_rule('/create', endpoint='create')
+    #app.add_url_rule('/view', endpoint='view')
 
     return app
 
