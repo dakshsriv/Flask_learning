@@ -24,11 +24,6 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
-
     from . import db
     db.init_app(app)  # Up to here was initialization. The following is initialisation of blueprints
     from . import auth
@@ -41,4 +36,3 @@ def create_app(test_config=None):
     #app.add_url_rule('/view', endpoint='view')
 
     return app
-
