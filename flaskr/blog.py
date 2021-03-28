@@ -81,8 +81,7 @@ def update(id):
             db.execute(
                 'UPDATE post SET title = ?, body = ?'
                 ' WHERE id = ?',
-                (title, body, id)
-            )
+                (title, body, id))
             db.commit()
             return redirect(url_for('blog.index'))
 
@@ -95,10 +94,40 @@ def delete(id):
     get_post(id)
     db = get_db()
     db.execute('DELETE FROM post WHERE id = ?', (id,))
-    db.commit()
     return redirect(url_for('blog.index'))
+
 
 @bp.route('/<int:id>/view')
 def view(id):
     post = get_post(id)
-    return render_template('blog/view.html', post=post)
+    likes = count_likes(id)
+    return render_template('blog/view.html', post=post, likes=likes)
+
+def count_likes(post_id):
+    db = get_db()
+    r = db.execute( "SELECT COUNT(1) FROM likes where post_id =? ", (post_id,))
+    count = r.fetchone()[0]
+    print(f"Number of liked for post {post_id} is {count}")
+    return count
+
+@bp.route('/<int:id>/like')
+def like(id):
+    db = get_db()
+    #print(f"g.user_id is: {g.user['id']}")
+    cur = db.execute("SELECT * FROM likes WHERE post_id=? AND user_id=?", (id, g.user['id']))
+    rv = cur.fetchall()
+    cur.close()
+    print(f"rv is:{rv}")
+    #print (rv[0] if rv else None) 
+    if not rv:
+        db.execute(
+                    'INSERT INTO likes (post_id, user_id) VALUES (?, ?)'
+                , (id, g.user['id']))
+        db.commit()
+    else:
+        db.execute(
+                    'DELETE FROM likes WHERE post_id=? AND user_id=?'
+                , (id, g.user['id'])
+                )
+        db.commit()
+    return redirect(url_for('blog.view', id=id))

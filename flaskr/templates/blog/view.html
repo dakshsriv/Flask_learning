@@ -12,6 +12,7 @@
       {% endif %}
     </header>
     <p class="body">{{ post['body'] }}</p>
+    <div class="inline"><a href="{{ url_for('blog.like', id=post['id']) }}"><img src="./../../static/images/thumbs-up.png" alt="thumbs-up" width="64" height="64" ></a><p>{{likes}}</p></div>
   </article>
 
 {% endblock %}

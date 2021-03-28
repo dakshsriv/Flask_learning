@@ -1,0 +1,12 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "Flaskr DB",
+            "database": "${workspaceFolder:flask-tutorial}/instance/flaskr.sqlite"
+        }
+    ],
+    "sqltools.useNodeRuntime": true,
+    "python.pythonPath": "/usr/bin/python3"
+}
