@@ -109,25 +109,29 @@ def count_likes(post_id):
     count = r.fetchone()[0]
     print(f"Number of liked for post {post_id} is {count}")
     return count
-
+@login_required
 @bp.route('/<int:id>/like')
 def like(id):
-    db = get_db()
-    #print(f"g.user_id is: {g.user['id']}")
-    cur = db.execute("SELECT * FROM likes WHERE post_id=? AND user_id=?", (id, g.user['id']))
-    rv = cur.fetchall()
-    cur.close()
-    print(f"rv is:{rv}")
-    #print (rv[0] if rv else None) 
-    if not rv:
-        db.execute(
-                    'INSERT INTO likes (post_id, user_id) VALUES (?, ?)'
-                , (id, g.user['id']))
-        db.commit()
-    else:
-        db.execute(
-                    'DELETE FROM likes WHERE post_id=? AND user_id=?'
-                , (id, g.user['id'])
-                )
-        db.commit()
+    try:
+        db = get_db()
+        #print(f"g.user_id is: {g.user['id']}")
+        cur = db.execute("SELECT * FROM likes WHERE post_id=? AND user_id=?", (id, g.user['id']))
+        rv = cur.fetchall()
+        cur.close()
+        print(f"rv is:{rv}")
+        #print (rv[0] if rv else None) 
+        if not rv:
+            db.execute(
+                        'INSERT INTO likes (post_id, user_id) VALUES (?, ?)'
+                    , (id, g.user['id']))
+            db.commit()
+        else:
+            db.execute(
+                        'DELETE FROM likes WHERE post_id=? AND user_id=?'
+                    , (id, g.user['id'])
+                    )
+            db.commit()
+    except:
+        return redirect(url_for('auth.login'))
     return redirect(url_for('blog.view', id=id))
+    
