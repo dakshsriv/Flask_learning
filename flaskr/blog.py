@@ -100,15 +100,21 @@ def delete(id):
 @bp.route('/<int:id>/view')
 def view(id):
     post = get_post(id)
-    likes = count_likes(id)
-    return render_template('blog/view.html', post=post, likes=likes)
+    likes_all, likes_self = count_likes(id, g.user['id'])
+    return render_template('blog/view.html', 
+    post=post, likes=likes_all, self_likes=likes_self)
 
-def count_likes(post_id):
+def count_likes(post_id, user_id):
     db = get_db()
     r = db.execute( "SELECT COUNT(1) FROM likes where post_id =? ", (post_id,))
-    count = r.fetchone()[0]
-    print(f"Number of liked for post {post_id} is {count}")
-    return count
+    count_total = r.fetchone()[0]
+    print(f"Number of liked for post {post_id} is {count_total}")
+
+    r = db.execute( "SELECT COUNT(1) FROM likes where post_id =? AND user_id =?", (post_id,user_id))
+    count_self = r.fetchone()[0]
+    print(f"Number of liked for post {post_id} from self is {count_self}")
+    return count_total,count_self
+
 @login_required
 @bp.route('/<int:id>/like')
 def like(id):

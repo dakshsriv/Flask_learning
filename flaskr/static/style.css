@@ -134,3 +134,16 @@ input[type=submit] {
 div, span {
   display: inline-block;
 }
+
+.like {
+  float: right;
+  padding-left: 25px;
+}
+
+.like-left {
+  display: inline-block;
+}
+
+.like-right {
+  display: inline-block;
+}
