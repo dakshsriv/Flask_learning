@@ -147,3 +147,16 @@ div, span {
 .like-right {
   display: inline-block;
 }
+
+.dislike {
+  float: right;
+  padding-left: 25px;
+}
+
+.dislike-left {
+  display: inline-block;
+}
+
+.dislike-right {
+  display: inline-block;
+}

@@ -140,3 +140,16 @@ html {
   title {
       color:rgb(58, 164, 199) ;
   }
+
+  .like {
+    float: right;
+    padding-left: 25px;
+  }
+  
+  .like-left {
+    display: inline-block;
+  }
+  
+  .like-right {
+    display: inline-block;
+  }

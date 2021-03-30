@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS post;
 DROP TABLE IF EXISTS likes;
+DROP TABLE IF EXISTS dislikes;
 
 
 CREATE TABLE user (
@@ -18,6 +19,11 @@ CREATE TABLE post (
 );
 
 CREATE TABLE likes (
+  post_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL
+);
+
+CREATE TABLE dislikes (
   post_id INTEGER NOT NULL,
   user_id INTEGER NOT NULL
 );
