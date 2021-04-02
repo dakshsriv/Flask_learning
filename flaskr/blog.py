@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
+    Blueprint, flash, g, redirect, render_template, request, url_for, session
 )
 from werkzeug.exceptions import abort
 
@@ -96,9 +96,18 @@ def delete(id):
     db.execute('DELETE FROM post WHERE id = ?', (id,))
     return redirect(url_for('blog.index'))
 
+@bp.route('/swtheme', methods=('POST',))
+def swtheme():
+    if session['theme'] == 'dark':
+        session['theme'] = 'light'
+    else:
+        session['theme'] = 'dark' 
+    return redirect(url_for('blog.index'))
+
 
 @bp.route('/<int:id>/view')
 def view(id):
+    #session['i'] = 7
     try:
         post = get_post(id)
         likes_all, likes_self = count_likes(id, g.user['id'])

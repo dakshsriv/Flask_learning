@@ -1,24 +1,14 @@
 <!doctype html>
 <title>{% block title %}{% endblock %} - Flaskr</title>
+{% if 'theme' not in session %}
+{% do session.update({'theme': 'theme'}) %}
+{% endif %}
+{% if session['theme'] == 'light' %}
 <link id="theme" rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+{% else %}
+<link id="theme" rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style-darktheme.css') }}">
+{% endif %}
 <meta name="color-scheme" content="dark light">
-<script> 
-  function toggleTheme() { 
-    
-      // Obtains an array of all <link> 
-      // elements. 
-      // Select your element using indexing. 
-      var theme = document.getElementsByTagName('link')[0]; 
-
-      // Change the value of href attribute  
-      // to change the css sheet. 
-      if (theme.getAttribute('href') == "{{ url_for('static', filename='style.css') }}") { 
-          theme.setAttribute('href', "{{ url_for('static', filename='style-darktheme.css') }}"); 
-      } else { 
-          theme.setAttribute('href', "{{ url_for('static', filename='style.css') }}"); 
-      } 
-  } 
-</script>
 <nav>
   <h1><a class="action" href="{{ url_for('blog.index') }}">Flaskr</a></h1>
   <ul>
@@ -30,7 +20,9 @@
       <li><a href="{{ url_for('auth.login') }}">Log In</a>
     {% endif %}
   </ul>
-  <button style="color:rgb(31, 156, 206);" onclick="toggleTheme('toggle')">Switch Theme</button> 
+  <form action="{{ url_for('blog.swtheme')}}" method="post">
+    <button style='color:aqua;' name="Switch" type="submit">Switch theme</button>
+  </form>
 </nav>
 <section class="content">
   <header>
@@ -41,3 +33,4 @@
   {% endfor %}
   {% block content %}{% endblock %}
 </section>
+{{ session}}
