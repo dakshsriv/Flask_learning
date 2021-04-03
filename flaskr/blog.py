@@ -19,6 +19,15 @@ def index():
     ).fetchall()
     return render_template('blog/index.html', posts=posts)
 
+@bp.route('/rcomment', methods=('GET', 'POST'))
+@login_required
+def rcomment(id, comment):
+    try:
+        x7x = g.user['id']
+    except: 
+        return redirect(url_for('auth.login'))
+    return comment(id, g.user_id, comment)    
+
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
 def create():
@@ -91,9 +100,9 @@ def update(id):
 @bp.route('/<int:id>/delete', methods=('POST',))
 @login_required
 def delete(id):
-    get_post(id)
     db = get_db()
     db.execute('DELETE FROM post WHERE id = ?', (id,))
+    db.commit()
     return redirect(url_for('blog.index'))
 
 @bp.route('/swtheme', methods=('POST',))
@@ -145,8 +154,6 @@ def count_dislikes(post_id, user_id):
 
 @bp.route('/<int:id>/like')
 def like(id):
-    print("**")
-    print(id)
     return like_dislike(id, 'like')
 
 
